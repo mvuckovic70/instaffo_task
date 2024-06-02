@@ -72,12 +72,12 @@ instaffo_task/instaffo_match
 
 # Instructions for usage (Windows)
 
-git clone https://<PAT>@github.com/mvuckovic70/instaffo_task.git (replace PAT with secret token provided by mail)
-cd instaffo_task
-python -m venv venv
-venv/Scripts/activate
-pip install -r requirements.txt
-python scripts/search.py
+'git clone https://<PAT>@github.com/mvuckovic70/instaffo_task.git (replace PAT with secret token provided by mail)'
+'cd instaffo_task'
+'python -m venv venv'
+'venv/Scripts/activate'
+'pip install -r requirements.txt'
+'python scripts/search.py'
 
 # Note:
 
