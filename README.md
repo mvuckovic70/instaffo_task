@@ -80,6 +80,13 @@ venv/Scripts/activate
 pip install -r requirements.txt
 python scripts/search.py
 ```
+# Reasons why this approach has been selected
+
+- mapping language, degree and seniority to numerical ordered values was necessary in order to create a matching criterion
+- creating boolean features which flag whether each of them fit into job requirement was needed since they will become model inputs
+- matching logic using this methodology is good enough even without any ML models
+- logistic regression has been selected as binary classification problem due to its simplicity and intuitivity in evaluation part
+- also, logistic regression is a good choice when picking the proper ML model, having in mind small number of fetures and them not being correlated to each other
 
 # Note:
 
