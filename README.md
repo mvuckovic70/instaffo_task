@@ -69,11 +69,3 @@ instaffo_task/instaffo_match
 
 - **requirements.txt**:
   - Lists all the Python dependencies required to run the project. Used to set up the environment quickly.
-
-## Setup
-
-1. **Clone the repository**:
-   ```sh
-   git clone <repository_url>
-   cd instaffo_task
->>>>>>> 2d8cd43 (Initial commit with task files.)
