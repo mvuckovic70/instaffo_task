@@ -69,3 +69,18 @@ instaffo_task/instaffo_match
 
 - **requirements.txt**:
   - Lists all the Python dependencies required to run the project. Used to set up the environment quickly.
+
+# Instructions for usage (Windows)
+
+git clone https://<PAT>@github.com/mvuckovic70/instaffo_task.git (replace PAT with secret token provided by mail)
+cd instaffo_task
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+python scripts/search.py
+
+# Note:
+
+Within searc.py script, there is an exampple of talents and job dicts for usage.
+This is for demo purposes only.
+For production usage, more suitable approach would using some api (flask or fastapi).
