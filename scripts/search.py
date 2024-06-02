@@ -5,8 +5,6 @@ import pandas as pd
 
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-utils_path = '/Users/milos/Downloads/instaffo_task/instaffo_match/utils'
-
 utils_path = os.path.join(base_path, 'utils')
 sys.path.append(utils_path)
 
