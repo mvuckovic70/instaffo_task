@@ -7,7 +7,7 @@ base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 utils_path = '/Users/milos/Downloads/instaffo_task/instaffo_match/utils'
 
-utils_path = os.path.join(base_path, 'instaffo_match', 'utils')
+utils_path = os.path.join(base_path, 'utils')
 sys.path.append(utils_path)
 
 from search_utils import transform_input, check_dict_structure, match_language_from_dict, match_seniority_from_dict, language_levels
@@ -15,7 +15,7 @@ from search_utils import match_degree_from_dict, match_salary_from_dict, match_j
 
 # load model
 
-model_path = os.path.join(base_path, 'instaffo_match', 'models', 'logistic_regression_model.pkl')
+model_path = os.path.join(base_path, 'models', 'logistic_regression_model.pkl')
 model = joblib.load(model_path)
 
 class Search:
