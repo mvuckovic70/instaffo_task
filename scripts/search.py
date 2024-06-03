@@ -77,6 +77,8 @@ class Search:
         res = {}
         data = create_dataset(job, talent)
         label = model.predict(data)[0]
+        if label == 0:  # filtering out non-matching talents
+            return None    
         score = model.predict_proba(data)[:, 1][0]
         res['talent'] = talent
         res['job'] = job
