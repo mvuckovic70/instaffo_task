@@ -5,8 +5,6 @@ This project contains a solution for matching talents to jobs using a logistic r
 # Project directory structure
 
 ```
-instaffo_task/instaffo_match
-
 --- data/
 ---- data.json
 ---- job_roles_taxonomy.csv
