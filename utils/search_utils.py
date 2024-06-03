@@ -60,7 +60,7 @@ def transform_input(input_dict, dict_type):
     - job_roles
     - max_salary
     
-    tlent:
+    talent:
     - languages
     - seniority
     - degree
