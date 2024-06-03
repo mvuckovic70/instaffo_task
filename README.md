@@ -14,6 +14,7 @@ This project contains a solution for matching talents to jobs using a logistic r
 
 --- notebooks/
 ---- instaffo.ipynb
+---- instaffo_v2.ipynb (enhanced version with new functionalities)
 
 --- scripts/
 ---- init.py
