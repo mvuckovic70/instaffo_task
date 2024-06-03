@@ -133,8 +133,12 @@ class Search:
                 talents_from_list = talents[t]
                 jobs_from_list = jobs[j]
                 predictions = self.match(talents_from_list, jobs_from_list)
-                final_result.append({'job_index': j, 'talent_index': t, 'prediction': predictions})
-        
+                if prediction:  # only add if there is a match
+                    final_result.append({'job_index': j, 'talent_index': t, 'prediction': prediction})
+
+        if not final_result:  # no result if no match is found
+            return []
+
         dff = pd.DataFrame(final_result)
         dff['score'] = [dff['prediction'][x]['score'] for x in range(dff.shape[0])]
         dff = dff.sort_values(['job_index', 'score'], ascending=[True, False])
