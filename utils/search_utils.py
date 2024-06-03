@@ -47,7 +47,7 @@ degrees = {
 }
 
 def transform_input(input_dict, dict_type):
-"""
+    """
     This is a function used to map and transform raw inputs of job and talent to mapping dictionaries provided above.
     The goal is to convert categorical values to numerical values with ordered properties, which is more suitable for modeling.
     
@@ -145,9 +145,9 @@ def transform_input(input_dict, dict_type):
 
 
 def check_dict_structure(dict, dict_type):
-"""
-This function checks the structure of input dictionaries.
-"""
+    """
+    This function checks the structure of input dictionaries.
+    """
     if dict_type == 'job':
     
         required_job_keys = {'languages', 'job_roles', 'seniorities', 'max_salary', 'min_degree'}
@@ -182,12 +182,12 @@ This function checks the structure of input dictionaries.
 
 
 def match_language_from_dict(job_dict, talent_dict):
-"""
-This function transforms and maps the language inputs to numerical ordered values.
-It then compares languages of job requirement with talent language in terms of particular language and fluency level.
-If fluency level of talent equals or is better than required language, then the match is positive.
-This only counts for languages which are mandatory (must_have=True).  
-"""
+    """
+    This function transforms and maps the language inputs to numerical ordered values.
+    It then compares languages of job requirement with talent language in terms of particular language and fluency level.
+    If fluency level of talent equals or is better than required language, then the match is positive.
+    This only counts for languages which are mandatory (must_have=True).  
+    """
     try:
         if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
             pass
@@ -217,11 +217,11 @@ This only counts for languages which are mandatory (must_have=True).
 
 
 def match_seniority_from_dict(job_dict, talent_dict):
-"""
-This function transforms and maps the seniority inputs to numerical ordered values.
-It then compares seniorities of job requirement with talent seniority.
-If seniority of talent equals or is better than required seniority, then the match is positive.
-"""
+    """
+    This function transforms and maps the seniority inputs to numerical ordered values.
+    It then compares seniorities of job requirement with talent seniority.
+    If seniority of talent equals or is better than required seniority, then the match is positive.
+    """
     try:
         if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
             pass
@@ -246,11 +246,11 @@ If seniority of talent equals or is better than required seniority, then the mat
         raise    
 
 def match_degree_from_dict(job_dict, talent_dict):
-"""
-This function transforms and maps the educational degree inputs to numerical ordered values.
-It then compares educational degree of job requirement with talent educational degree.
-If degree of talent equals or is better than required degree, then the match is positive.
-"""
+    """
+    This function transforms and maps the educational degree inputs to numerical ordered values.
+    It then compares educational degree of job requirement with talent educational degree.
+    If degree of talent equals or is better than required degree, then the match is positive.
+    """
     try:
         if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
             pass
@@ -276,10 +276,10 @@ If degree of talent equals or is better than required degree, then the match is 
 
 
 def match_salary_from_dict(job_dict, talent_dict):
-"""
-This function transforms and compares salary values.
-If expected salary of talent equals or is smaller than job requirement max_salary, then the match is positive.
-"""
+    """
+    This function transforms and compares salary values.
+    If expected salary of talent equals or is smaller than job requirement max_salary, then the match is positive.
+    """
     try:
         if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
             pass
@@ -305,10 +305,10 @@ If expected salary of talent equals or is smaller than job requirement max_salar
 
 
 def match_job_roles_from_dict(job_dict, talent_dict):
-"""
-This function transforms and compares job roles.
-If any job roles(s) of talent match any job requirement role(s), then the match is positive.
-"""
+    """
+    This function transforms and compares job roles.
+    If any job roles(s) of talent match any job requirement role(s), then the match is positive.
+    """
     try:
         if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
             pass
@@ -334,11 +334,11 @@ If any job roles(s) of talent match any job requirement role(s), then the match 
 
 
 def create_dataset(j_dict, t_dict):
-"""
-This function creates boolean values for given features based on matching logic.
-It then creates a pandas dataframe with these features.
-Finally, it converts it to dictionary and returns it as output of a function.
-"""
+    """
+    This function creates boolean values for given features based on matching logic.
+    It then creates a pandas dataframe with these features.
+    Finally, it converts it to dictionary and returns it as output of a function.
+    """
     try:
         seniority_match = match_seniority_from_dict(j_dict, t_dict)
         degree_match = match_degree_from_dict(j_dict, t_dict)
@@ -368,11 +368,11 @@ Finally, it converts it to dictionary and returns it as output of a function.
 
 
 def create_prediction(job, talent):
-"""
-This function creates dataset of fetures.
-It then runs a binary logistic regression classification model to predict whether a talent matches the job requirement.
-Finally, it converts the to dictionary as per task requirement and returns it as output of a function.
-"""
+    """
+    This function creates dataset of fetures.
+    It then runs a binary logistic regression classification model to predict whether a talent matches the job requirement.
+    Finally, it converts the to dictionary as per task requirement and returns it as output of a function.
+    """
     try:
         res = {}
         data = create_dataset(job, talent)
