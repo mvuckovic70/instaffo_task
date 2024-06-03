@@ -8,10 +8,12 @@ This project contains a solution for matching talents to jobs using a logistic r
 
 # Project directory structure
 
+```
 instaffo_task/instaffo_match
 
 --- data/
 ---- data.json
+---- job_roles_taxonomy.csv
 
 --- models/
 ---- logistic_regression_model.pkl
@@ -29,7 +31,7 @@ instaffo_task/instaffo_match
 
 --- README.md
 --- requirements.txt
-
+```
 # Project implementation steps
 
 1) business understanding
@@ -48,6 +50,7 @@ instaffo_task/instaffo_match
 
 - **data/**:
   - `data.json`: Example data file (here same data we received for task).
+  - `job_roles_taxonomy` : Taxonomy for job roles 
 
 - **models/**:
   - `logistic_regression_model.pkl`: Pre-trained logistic regression model saved using `joblib`. 
