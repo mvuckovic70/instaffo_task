@@ -1,0 +1,34 @@
+job_role,category,subcategory
+backend-developer,IT,Software Development
+business-analyst,Others,Project Management
+business-development-manager,Sales,Sales Management
+c-c-developer,IT,Software Development
+c-net-developer,IT,Software Development
+cloud-engineer,IT,Software Development
+consulting,Others,Consulting
+content-marketing-manager,Sales,Marketing
+customer-success-manager,Sales,Customer Success
+data-analyst,IT,Data
+data-engineer,IT,Data
+data-scientist,IT,Data
+devops-engineer,IT,Software Development
+engineering-manager,Unknown,Unknown
+frontend-developer,IT,Software Development
+full-stack-developer,IT,Software Development
+java-developer,IT,Software Development
+key-account-manager,Sales,Sales Management
+mobile-developer,IT,Software Development
+online-marketing-manager,Sales,Marketing
+performance-marketing-manager,Sales,Marketing
+php-developer,IT,Software Development
+presales-manager,Sales,Customer Success
+product-owner,Others,Project Management
+project-manager,Others,Project Management
+qa-engineer,IT,Software Development
+sales-manager,Sales,Sales Management
+scrum-master-agile-coach,Others,Project Management
+security,IT,Security
+software-architect,IT,Software Development
+system-administrator,IT,System Administration
+system-engineer,IT,System Administration
+tech-lead,IT,Software Development
