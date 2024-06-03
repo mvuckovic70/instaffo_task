@@ -1,7 +1,3 @@
-# instaffo
-
-Creating end-to-end  solution to run ML model for matching jobs and talents
-
 # Instaffo Task
 
 This project contains a solution for matching talents to jobs using a logistic regression model. The solution includes a class `Search` with methods to match a single talent to a job and multiple talents to multiple jobs.
