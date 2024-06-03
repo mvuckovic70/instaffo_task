@@ -3,9 +3,72 @@ import pandas as pd
 import numpy as np
 import copy
 import joblib
+import logging
+import sys
 import os
 
+# setting up the logger to log to console
+
+logging.basicConfig(
+    level=logging.ERROR,
+    format='%(asctime)s %(levelname)s %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+# mapping dictionaries
+
+language_levels = {
+    'none' : 0,
+    'A1' : 1,
+    'A2' : 2,
+    'B1' : 3,
+    'B2' : 4,
+    'C1' : 5,
+    'C2' : 6  
+}
+
+seniorities = {
+    'none' : 0,
+    'junior' : 1,
+    'midlevel' : 2,
+    'senior' : 3
+}
+
+degrees = {
+    'none' : 0,
+    'apprenticeship' : 1,
+    'bachelor' : 2,
+    'master' : 3,
+    'doctorate' : 4  
+}
+
 def transform_input(input_dict, dict_type):
+"""
+    This is a function used to map and transform raw inputs of job and talent to mapping dictionaries provided above.
+    The goal is to convert categorical values to numerical values with ordered properties, which is more suitable for modeling.
+    
+    Attributes
+    ----------
+    job:
+    - languages
+    - senioritires
+    - min_degree
+    - job_roles
+    - max_salary
+    
+    tlent:
+    - languages
+    - seniority
+    - degree
+    - job_roles
+    - salary_expectation
+    
+    The structure would remain unchanged.
+    """
 
     try:
     
@@ -74,13 +137,17 @@ def transform_input(input_dict, dict_type):
             print('wrong input')
 
     except Exception as e:
-
-        raise('error:', e)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred", exc_info=True)
+        print(exc_type, fname, exc_tb.tb_lineno)
         
-    
+
 
 def check_dict_structure(dict, dict_type):
-
+"""
+This function checks the structure of input dictionaries.
+"""
     if dict_type == 'job':
     
         required_job_keys = {'languages', 'job_roles', 'seniorities', 'max_salary', 'min_degree'}
@@ -115,168 +182,212 @@ def check_dict_structure(dict, dict_type):
 
 
 def match_language_from_dict(job_dict, talent_dict):
+"""
+This function transforms and maps the language inputs to numerical ordered values.
+It then compares languages of job requirement with talent language in terms of particular language and fluency level.
+If fluency level of talent equals or is better than required language, then the match is positive.
+This only counts for languages which are mandatory (must_have=True).  
+"""
+    try:
+        if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
+            pass
+        else:
+            raise('error in dict structure')
+    
+        transformed_job = transform_input(job_dict, 'job')
+        transformed_talent = transform_input(talent_dict, 'talent')
+    
+        job_languages = transformed_job['languages']
+        talent_languages = {lang['title']: lang['rating'] for lang in transformed_talent['languages']}
+    
+        for job_lang in job_languages:
+            job_title = job_lang['title']
+            job_rating = job_lang['rating']
+            
+            if job_title not in talent_languages or talent_languages[job_title] < job_rating:
+                return 0
+            
+        return 1
 
-    if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
-        pass
-    else:
-        raise('error in dict structure')
-
-    transformed_job = transform_input(job_dict, 'job')
-    transformed_talent = transform_input(talent_dict, 'talent')
-
-    job_languages = transformed_job['languages']
-    talent_languages = {lang['title']: lang['rating'] for lang in transformed_talent['languages']}
-
-    for job_lang in job_languages:
-        job_title = job_lang['title']
-        job_rating = job_lang['rating']
-        
-        if job_title not in talent_languages or talent_languages[job_title] < job_rating:
-            return 0
-        
-    return 1
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise    
 
 
 def match_seniority_from_dict(job_dict, talent_dict):
-
-    if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
-        pass
-    else:
-        raise('error in dict structure')
-
-    transformed_job = transform_input(job_dict, 'job')
-    transformed_talent = transform_input(talent_dict, 'talent')
-
-    min_job_seniority = min(transformed_job['seniorities'])
-    talent_seniority = transformed_talent['seniority']
-
-    if talent_seniority >= min_job_seniority:
-        return 1
+"""
+This function transforms and maps the seniority inputs to numerical ordered values.
+It then compares seniorities of job requirement with talent seniority.
+If seniority of talent equals or is better than required seniority, then the match is positive.
+"""
+    try:
+        if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
+            pass
+        else:
+            raise('error in dict structure')
     
-    return 0
+        transformed_job = transform_input(job_dict, 'job')
+        transformed_talent = transform_input(talent_dict, 'talent')
     
+        min_job_seniority = min(transformed_job['seniorities'])
+        talent_seniority = transformed_talent['seniority']
+    
+        if talent_seniority >= min_job_seniority:
+            return 1
+        
+        return 0
+        
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise    
 
 def match_degree_from_dict(job_dict, talent_dict):
-
-    if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
-        pass
-    else:
-        raise('error in dict structure')
-
-    transformed_job = transform_input(job_dict, 'job')
-    transformed_talent = transform_input(talent_dict, 'talent')
-
-    min_job_degree = transformed_job['min_degree']
-    talent_degree = transformed_talent['degree']
-
-    if talent_degree >= min_job_degree:
-        return 1
+"""
+This function transforms and maps the educational degree inputs to numerical ordered values.
+It then compares educational degree of job requirement with talent educational degree.
+If degree of talent equals or is better than required degree, then the match is positive.
+"""
+    try:
+        if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
+            pass
+        else:
+            raise('error in dict structure')
     
-    return 0
+        transformed_job = transform_input(job_dict, 'job')
+        transformed_talent = transform_input(talent_dict, 'talent')
     
+        min_job_degree = transformed_job['min_degree']
+        talent_degree = transformed_talent['degree']
+    
+        if talent_degree >= min_job_degree:
+            return 1
+        
+        return 0
+
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise 
 
 
 def match_salary_from_dict(job_dict, talent_dict):
-
-    if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
-        pass
-    else:
-        raise('error in dict structure')
-
-    transformed_job = transform_input(job_dict, 'job')
-    transformed_talent = transform_input(talent_dict, 'talent')
-
-    job_max_salary = transformed_job['max_salary']
-    talent_expected_salary = transformed_talent['salary_expectation']
-
-    if talent_expected_salary <= job_max_salary:
-        return 1
+"""
+This function transforms and compares salary values.
+If expected salary of talent equals or is smaller than job requirement max_salary, then the match is positive.
+"""
+    try:
+        if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
+            pass
+        else:
+            raise('error in dict structure')
     
-    return 0
-
+        transformed_job = transform_input(job_dict, 'job')
+        transformed_talent = transform_input(talent_dict, 'talent')
+    
+        job_max_salary = transformed_job['max_salary']
+        talent_expected_salary = transformed_talent['salary_expectation']
+    
+        if talent_expected_salary <= job_max_salary:
+            return 1
+        
+        return 0
+        
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise
 
 
 def match_job_roles_from_dict(job_dict, talent_dict):
-
-    if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
-        pass
-    else:
-        raise('error in dict structure')
-
-    transformed_job = transform_input(job_dict, 'job')
-    transformed_talent = transform_input(talent_dict, 'talent')
-
-    job_roles = transformed_job['job_roles']
-    talent_roles = transformed_talent['job_roles']
-
-    for role in talent_roles:
-        if role in job_roles:
-            return 1
-    return 0
+"""
+This function transforms and compares job roles.
+If any job roles(s) of talent match any job requirement role(s), then the match is positive.
+"""
+    try:
+        if(check_dict_structure(job_dict, 'job') == 'ok' and check_dict_structure(talent_dict, 'talent') == 'ok'):
+            pass
+        else:
+            raise('error in dict structure')
     
+        transformed_job = transform_input(job_dict, 'job')
+        transformed_talent = transform_input(talent_dict, 'talent')
+    
+        job_roles = transformed_job['job_roles']
+        talent_roles = transformed_talent['job_roles']
+    
+        for role in talent_roles:
+            if role in job_roles:
+                return 1
+        return 0
+        
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise
 
 
 def create_dataset(j_dict, t_dict):
+"""
+This function creates boolean values for given features based on matching logic.
+It then creates a pandas dataframe with these features.
+Finally, it converts it to dictionary and returns it as output of a function.
+"""
+    try:
+        seniority_match = match_seniority_from_dict(j_dict, t_dict)
+        degree_match = match_degree_from_dict(j_dict, t_dict)
+        salary_match = match_salary_from_dict(j_dict, t_dict)
+        language_match = match_language_from_dict(j_dict, t_dict)
+        job_role_match = match_job_roles_from_dict(j_dict, t_dict)
     
-    seniority_match = match_seniority_from_dict(j_dict, t_dict)
-    degree_match = match_degree_from_dict(j_dict, t_dict)
-    salary_match = match_salary_from_dict(j_dict, t_dict)
-    language_match = match_language_from_dict(j_dict, t_dict)
-    job_role_match = match_job_roles_from_dict(j_dict, t_dict)
-
-    df_match = pd.DataFrame(
-        {
-            'seniority_match' : [seniority_match], 
-            'degree_match' : [degree_match], 
-            'salary_match' : [salary_match], 
-            'language_match' : [language_match], 
-            'job_role_match' : [job_role_match]
-        }
-    )
-
-    input_dict = df_match.to_dict(orient='records')
-
-    return input_dict
+        df_match = pd.DataFrame(
+            {
+                'seniority_match' : [seniority_match], 
+                'degree_match' : [degree_match], 
+                'salary_match' : [salary_match], 
+                'language_match' : [language_match], 
+                'job_role_match' : [job_role_match]
+            }
+        )
+    
+        input_dict = df_match.to_dict(orient='records')
+    
+        return input_dict
+        
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise
 
 
 def create_prediction(job, talent):
-    res = {}
-    data = create_dataset(job, talent)
-    label = model.predict(data)[0]
-    score = model.predict_proba(data)[:, 1][0]
-    res['talent'] = talent
-    res['job'] = job
-    res['label'] = label
-    res['score'] = score
-
-    return res
+"""
+This function creates dataset of fetures.
+It then runs a binary logistic regression classification model to predict whether a talent matches the job requirement.
+Finally, it converts the to dictionary as per task requirement and returns it as output of a function.
+"""
+    try:
+        res = {}
+        data = create_dataset(job, talent)
+        label = model.predict(data)[0]
+        score = model.predict_proba(data)[:, 1][0]
+        res['talent'] = talent
+        res['job'] = job
+        res['label'] = label
+        res['score'] = score
     
-
-# mapping dictionaries
-
-language_levels = {
-    'none' : 0,
-    'A1' : 1,
-    'A2' : 2,
-    'B1' : 3,
-    'B2' : 4,
-    'C1' : 5,
-    'C2' : 6  
-}
-
-seniorities = {
-    'none' : 0,
-    'junior' : 1,
-    'midlevel' : 2,
-    'senior' : 3
-}
-
-degrees = {
-    'none' : 0,
-    'apprenticeship' : 1,
-    'bachelor' : 2,
-    'master' : 3,
-    'doctorate' : 4  
-}
-
+        return res
+        
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        raise
 
