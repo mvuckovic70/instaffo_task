@@ -71,10 +71,10 @@ This project contains a solution for matching talents to jobs using a logistic r
 # Instructions for usage (Windows)
 
 ```sh
-git clone https://<PAT>@github.com/mvuckovic70/instaffo_task.git (replace PAT with secret token provided by mail)
+git clone <url provided in mail>
 cd instaffo_task
 python -m venv venv
-venv/Scripts/activate
+venv\Scripts\activate
 pip install -r requirements.txt
 python scripts/search.py
 ```
