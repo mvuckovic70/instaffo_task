@@ -138,24 +138,24 @@ class Search:
                 if predictions:  # only add if there is a match
                     final_result.append({'job_index': j, 'talent_index': t, 'prediction': predictions})
 
-                    dff = pd.DataFrame(final_result)
-                    dff['score'] = [dff['prediction'][x]['score'] for x in range(dff.shape[0])]
-                    dff = dff.sort_values(['job_index', 'score'], ascending=[True, False])
-                    
-                    match_bulk = [
-                        {
-                            "talent": row['prediction']['talent'],
-                            "job": row['prediction']['job'],
-                            "label": row['prediction']['label'],
-                            "score": row['prediction']['score']
-                        }
-                        for _, row in dff.iterrows()
-                    ]
-                
-                    return match_bulk
-        
         if not final_result:  # no result if no match is found
             return []
+
+        dff = pd.DataFrame(final_result)
+        dff['score'] = [dff['prediction'][x]['score'] for x in range(dff.shape[0])]
+        dff = dff.sort_values(['job_index', 'score'], ascending=[True, False])
+
+        match_bulk = [
+            {
+                "talent": row['prediction']['talent'],
+                "job": row['prediction']['job'],
+                "label": row['prediction']['label'],
+                "score": row['prediction']['score']
+            }
+            for _, row in dff.iterrows()
+        ]
+
+        return match_bulk
             
 if __name__ == "__main__":
     # Load the model
