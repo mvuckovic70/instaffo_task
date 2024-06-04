@@ -380,7 +380,8 @@ def create_prediction(job, talent):
         res = {}
         data = create_dataset(job, talent)
         label = model.predict(data)[0]
-        score = model.predict_proba(data)[:, 1][0]
+        score = scorer(talent, job)
+        # score = model.predict_proba(data)[:, 1][0]
         res['talent'] = talent
         res['job'] = job
         res['label'] = label
