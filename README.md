@@ -50,12 +50,12 @@ This project contains a solution for matching talents to jobs using a logistic r
   - `logistic_regression_model.pkl`: Pre-trained logistic regression model saved using `joblib`. 
 
 - **notebooks/**:
-  - `instaffo.ipynb`: Jupyter notebook showing implementation steps from above.
+  - `instaffo_final.ipynb`: Jupyter notebook showing implementation steps from above.
 
 - **scripts/**:
   - `__init__.py`: An empty file to make this directory a Python package.
   - `search.py`: Contains the `Search` class which includes methods to match a single talent to a job and multiple talents to multiple jobs.
-  - `run_model.py`: Script to demonstrate how to load the model and use it to make predictions.
+  - `script.py`: Script to demonstrate how to load the model and use it to make predictions.
 
 - **utils/**:
   - `__init__.py`: An empty file to make this directory a Python package.
