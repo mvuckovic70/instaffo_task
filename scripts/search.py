@@ -173,6 +173,20 @@ if __name__ == "__main__":
             "degree": "bachelor"
         },
         {
+            "languages": [{"title": "German", "rating": "B2"}, {"title": "English", "rating": "C1"}],
+            "job_roles": ["frontend-developer"],
+            "seniority": "midlevel",
+            "salary_expectation": 35000,
+            "degree": "bachelor"
+        },
+        {
+            "languages": [{"title": "German", "rating": "B2"}, {"title": "English", "rating": "C1"}],
+            "job_roles": ["frontend-developer"],
+            "seniority": "senior",
+            "salary_expectation": 68000,
+            "degree": "bachelor"
+        },
+        {
             "languages": [{"title": "German", "rating": "C2"}, {"title": "English", "rating": "C1"}],
             "job_roles": ["frontend-developer"],
             "seniority": "midlevel",
