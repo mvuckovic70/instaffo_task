@@ -133,7 +133,7 @@ class Search:
                 talents_from_list = talents[t]
                 jobs_from_list = jobs[j]
                 predictions = self.match(talents_from_list, jobs_from_list)
-                if prediction:  # only add if there is a match
+                if predictions:  # only add if there is a match
                     final_result.append({'job_index': j, 'talent_index': t, 'prediction': prediction})
 
         if not final_result:  # no result if no match is found
