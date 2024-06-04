@@ -408,20 +408,24 @@ def check_language_match(talent_languages, job_languages):
         
         total_weight = 0 # initiated total weight of all 'must_have' job languages
         match_count = 0 # initiated total weight of matched 'must_have' job languages
+        all_must_have_met = True  # flag to check if all must_have requirements are met
 
         for job_language in job_languages:
-            # only consider 'must_have' job languages
+            # Only consider 'must_have' job languages
             if job_language.get('must_have', False):
                 job_title = job_language['title']
                 job_rating = language_levels[job_language['rating']]
                 total_weight += job_rating
-
-                 # check if the talent has the required level for the 'must_have' job language
-                if talent_language_dict.get(job_title, 0) >= job_rating:
-                    match_count += job_rating # add the weight of the 'must_have' job language to total weight
+        
+                # Check if the talent has the required level for the 'must_have' job language
+                talent_rating = talent_language_dict.get(job_title, 0)
+                if talent_rating >= job_rating:
+                    match_count += job_rating  # Add the weight of the 'must_have' job language to total weight
+                else:
+                    all_must_have_met = False  # Mark that not all must_have requirements are met
 
         threshold = 0.5 # Define the threshold for matching (50% of total weight)
-        is_match = match_count >= threshold * total_weight # Determine if the match count meets the threshold
+        is_match = all_must_have_met and (match_count >= threshold * total_weight)  # Determine if the match count meets the threshold
         
         return int(is_match), total_weight # Return the match result (1 for match, 0 for no match) and total weight
 
