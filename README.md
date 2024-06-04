@@ -44,7 +44,7 @@ This project contains a solution for matching talents to jobs using a logistic r
 
 - **data/**:
   - `data.json`: Example data file (here same data we received for task).
-  - `job_roles_taxonomy` : Taxonomy for job roles 
+  - `job_roles_taxonomy.csv` : Taxonomy for job roles 
 
 - **models/**:
   - `logistic_regression_model.pkl`: Pre-trained logistic regression model saved using `joblib`. 
@@ -55,7 +55,6 @@ This project contains a solution for matching talents to jobs using a logistic r
 - **scripts/**:
   - `__init__.py`: An empty file to make this directory a Python package.
   - `search.py`: Contains the `Search` class which includes methods to match a single talent to a job and multiple talents to multiple jobs.
-  - `script.py`: Script to demonstrate how to load the model and use it to make predictions.
 
 - **utils/**:
   - `__init__.py`: An empty file to make this directory a Python package.
