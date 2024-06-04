@@ -10,6 +10,7 @@ sys.path.append(utils_path)
 
 from search_utils import transform_input, check_dict_structure, match_language_from_dict, match_seniority_from_dict, language_levels
 from search_utils import match_degree_from_dict, match_salary_from_dict, match_job_roles_from_dict, create_dataset, create_prediction
+from search_utils import scorer, check_language_match
 
 # load model
 
@@ -79,7 +80,8 @@ class Search:
         label = model.predict(data)[0]
         if label == 0:  # filtering out non-matching talents
             return None    
-        score = model.predict_proba(data)[:, 1][0]
+        score = scorer(talent, job)
+        # score = model.predict_proba(data)[:, 1][0]
         res['talent'] = talent
         res['job'] = job
         res['label'] = label
