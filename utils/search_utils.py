@@ -19,9 +19,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-# mapping dictionaries
-
-# mapping dictionaries
+# mapping dictionaries: We put more weight on more advanced features
 
 language_levels = {
     'none' : 0,
@@ -36,8 +34,8 @@ language_levels = {
 seniorities = {
     'none' : 0,
     'junior' : 1,
-    'midlevel' : 2,
-    'senior' : 3
+    'midlevel' : 3,
+    'senior' : 5
 }
 
 degrees = {
