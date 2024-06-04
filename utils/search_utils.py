@@ -454,7 +454,7 @@ def scorer(talent_dict, job_dict):
     try:
         
         def weight_languages(talent_dict, job_dict):
-            return check_language_match(dict_talent_0['languages'], dict_job_0['languages'])[1]/100
+            return check_language_match(talent_dict['languages'], job_dict['languages'])[1]/100
             
         def weight_job_roles(talent_dict, job_dict):
             job_job_roles = job_dict['job_roles']
