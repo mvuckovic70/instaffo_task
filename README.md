@@ -89,5 +89,6 @@ python scripts/search.py
 # Note:
 
 Within search.py script, there is an example of talents and job dicts for usage.
+The result is sorted by weighted score in descending order.
 This is for demo purposes only.
 For production usage, more suitable approach would be using some api (flask or fastapi).
