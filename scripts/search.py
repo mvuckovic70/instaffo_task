@@ -191,9 +191,13 @@ if __name__ == "__main__":
     ]
 
     # Run match method for a single talent and job
-    single_result = search.match(talents[0], jobs[0])
     print("Single Match Result:")
-    print(single_result)
+    for talent in talents:
+        for job in jobs:
+            single_result = search.match(talent, job)
+            if single_result:
+                print("Single Match Result:")
+                print(single_result)
 
     # Run match_bulk method for multiple talents and jobs
     bulk_result = search.match_bulk(talents, jobs)
