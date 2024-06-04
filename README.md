@@ -13,8 +13,7 @@ This project contains a solution for matching talents to jobs using a logistic r
 ---- logistic_regression_model.pkl
 
 --- notebooks/
----- instaffo.ipynb
----- instaffo_v2.ipynb (enhanced version with new functionalities)
+---- instaffo_final.ipynb
 
 --- scripts/
 ---- init.py
