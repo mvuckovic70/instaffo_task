@@ -21,14 +21,16 @@ logger = logging.getLogger(__name__)
 
 # mapping dictionaries
 
+# mapping dictionaries
+
 language_levels = {
     'none' : 0,
     'A1' : 1,
     'A2' : 2,
-    'B1' : 3,
-    'B2' : 4,
-    'C1' : 5,
-    'C2' : 6  
+    'B1' : 4,
+    'B2' : 8,
+    'C1' : 16,
+    'C2' : 32  
 }
 
 seniorities = {
@@ -45,6 +47,7 @@ degrees = {
     'master' : 3,
     'doctorate' : 4  
 }
+
 
 def transform_input(input_dict, dict_type):
     """
@@ -391,3 +394,107 @@ def create_prediction(job, talent):
         logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
         raise
 
+def check_language_match(talent_languages, job_languages):
+    """
+    This function:
+    - maps numeric levels to language fluency levels
+    - filters out any language in job requirements marked as must_have=False
+    (although it can be considered and weighted in some future version as a "good to have" feature)
+    - matches talent languages with job requirements
+    - calculates and sums fluency weights for every matched language against required fluency
+    """
+    try:
+        # Creating a dictionary for talent language levels with weights
+        talent_language_dict = {lang['title']: language_levels[lang['rating']] for lang in talent_languages}
+        
+        total_weight = 0 # initiated total weight of all 'must_have' job languages
+        match_count = 0 # initiated total weight of matched 'must_have' job languages
+
+        for job_language in job_languages:
+            # only consider 'must_have' job languages
+            if job_language.get('must_have', False):
+                job_title = job_language['title']
+                job_rating = language_levels[job_language['rating']]
+                total_weight += job_rating
+
+                 # check if the talent has the required level for the 'must_have' job language
+                if talent_language_dict.get(job_title, 0) >= job_rating:
+                    match_count += job_rating # add the weight of the 'must_have' job language to total weight
+
+        threshold = 0.5 # Define the threshold for matching (50% of total weight)
+        is_match = match_count >= threshold * total_weight # Determine if the match count meets the threshold
+        
+        return int(is_match), total_weight # Return the match result (1 for match, 0 for no match) and total weight
+
+    except KeyError as e:
+        logger.error("KeyError occurred", exc_info=True)
+        return 0, 0
+    except TypeError as e:
+        logger.error("TypeError occurred", exc_info=True)
+        return 0, 0
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        print(exc_type, fname, exc_tb.tb_lineno)
+        return 0, 0
+
+        
+def scorer(talent_dict, job_dict):
+    """
+    This function weights performance of each factors plugged in the model by weighing agains job requirements:
+    - language fluency (difference)
+    - seniority (difference between talent seniority and minimum required seniority)
+    - degree (difference between talent degree and job required minimum degree)
+    - salary (defference between job max_salary and expected salar)
+    - job roles (counting number of job roles in common)
+    and adds a cumulative score which would serve as a sorting criterion between the candidates during the matching process
+    """
+    try:
+        
+        def weight_languages(talent_dict, job_dict):
+            return check_language_match(dict_talent_0['languages'], dict_job_0['languages'])[1]/100
+            
+        def weight_job_roles(talent_dict, job_dict):
+            job_job_roles = job_dict['job_roles']
+            talent_job_roles = talent_dict['job_roles']
+            return sum(role in job_job_roles for role in talent_job_roles)
+        
+        def weight_seniorities(talent_dict, job_dict):
+            talent_dict['seniority_mapped'] = seniorities.get(talent_dict['seniority'], 0)
+            job_dict['seniorities_mapped'] = [seniorities.get(s, 0) for s in job_dict['seniorities']]
+            return talent_dict['seniority_mapped'] - min(job_dict['seniorities_mapped'])
+            
+        def weight_salaries(talent_dict, job_dict):
+            job_salary = job_dict['max_salary']
+            talent_salary = talent_dict['salary_expectation']
+            return (job_salary - talent_salary)/10000
+        
+        def weight_degrees(talent_dict, job_dict):
+            talent_dict['degree_mapped'] = degrees.get(talent_dict.get('degree', 'none'), 0)
+            job_dict['degree_mapped'] = degrees.get(job_dict.get('min_degree', 'none'), 0)
+            return (talent_dict['degree_mapped'] - job_dict['degree_mapped'])
+        
+        language_weight = weight_languages(talent_dict, job_dict)
+        job_role_weight = weight_job_roles(talent_dict, job_dict)
+        seniority_weight = weight_seniorities(talent_dict, job_dict)
+        salary_weight = weight_salaries(talent_dict, job_dict)
+        degree_weight = weight_degrees(talent_dict, job_dict)
+        
+        score = language_weight + job_role_weight + seniority_weight + salary_weight + degree_weight
+    
+        return score
+
+    except KeyError as e:
+        logger.error("KeyError occurred", exc_info=True)
+        return 0, 0
+    except TypeError as e:
+        logger.error("TypeError occurred", exc_info=True)
+        return 0, 0
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception occurred in %s at line %d", fname, exc_tb.tb_lineno, exc_info=True)
+        print(exc_type, fname, exc_tb.tb_lineno)
+        return 0, 0
+        
